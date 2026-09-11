@@ -1,0 +1,17 @@
+name: Create refs
+on:
+  create:
+    refs: ["**"]
+permissions: {}
+jobs:
+  marker:
+    name: Create refs marker
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Observe executed create identity
+        env:
+          CREATE_WORKFLOW_MARKER: "r-a352b97d2499:lightweight:EXECUTED:refs"
+          CREATE_CONTEXT: '{"event_name": "${{ github.event_name }}", "action": "${{ github.event.action }}", "ref": "${{ github.ref }}", "ref_name": "${{ github.ref_name }}", "ref_type": "${{ github.ref_type }}", "sha": "${{ github.sha }}", "workflow": "${{ github.workflow }}", "workflow_ref": "${{ github.workflow_ref }}", "workflow_sha": "${{ github.workflow_sha }}", "repository": "${{ github.repository }}", "raw_ref": "${{ github.event.ref }}", "raw_ref_type": "${{ github.event.ref_type }}", "default_branch": "${{ github.event.repository.default_branch }}", "sender": "${{ github.event.sender.login }}"}'
+        run: python3 create-marker.py
